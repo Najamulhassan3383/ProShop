@@ -1,8 +1,13 @@
 import express from "express";
-const PORT = 5000;
+import dotenv from "dotenv";
+dotenv.config();
+const PORT = process.env.PORT || 5000;
 import products from "./data/products.js";
+import cors from "cors";
 
 const App = express();
+
+App.use(cors());
 
 App.get("/", (req, res) => {
   res.send("Server is ready");
