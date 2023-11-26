@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 const App = express();
@@ -17,6 +18,9 @@ App.get("/", (req, res) => {
 });
 
 App.use("/api/products", productRoutes);
+
+App.use(notFound);
+App.use(errorHandler);
 App.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
