@@ -7,6 +7,7 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 const getProductById = asyncHandler(async (req, res) => {
+  console.log("req.params.id: ", req.params.id);
   const product = await Products.findById(req.params.id); // Add 'await' here
 
   if (product) {

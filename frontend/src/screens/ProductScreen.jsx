@@ -10,10 +10,14 @@ function ProductScreen() {
   const [product, setProduct] = useState({});
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(`http://localhost:5000/api/products/${id}`);
-      const data = await res.json();
-      console.log(data);
-      setProduct(data);
+      try {
+        const res = await fetch(`http://localhost:5000/api/products/${id}`);
+        const data = await res.json();
+        console.log(data);
+        setProduct(data);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchProduct();
   }, [id]);
