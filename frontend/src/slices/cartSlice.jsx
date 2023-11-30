@@ -14,12 +14,12 @@ const cartSlice = createSlice({
     addToCart: (state, action) => {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
+        (item) => item._id === newItem._id
       );
 
       if (existingItem) {
         state.cartItems = state.cartItems.map((item) =>
-          item.id === existingItem.id ? newItem : item
+          item._id === existingItem._id ? newItem : item
         );
       } else {
         state.cartItems = [...state.cartItems, newItem];
