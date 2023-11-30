@@ -15,19 +15,24 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const newItem = action.payload;
-      const existingItem = state.items.find((item) => item.id === newItem.id);
+      const existingItem = state.cartItems.find(
+        (item) => item.id === newItem.id
+      );
 
       if (existingItem) {
-        state.cartItems = state.items.map((item) =>
+        state.cartItems = state.cartItems.map((item) =>
           item.id === existingItem.id ? newItem : item
         );
       } else {
-        state.cartItems = [...state.items, newItem];
+        state.cartItems = [...state.cartItems, newItem];
       }
 
       //calculate item price
       state.itemsPrice = addDecimals(
-        state.items.reduce((total, item) => total + item.price * item.qty, 0)
+        state.cartItems.reduce(
+          (total, item) => total + item.price * item.qty,
+          0
+        )
       );
       //calculate shipping price, if order is over 100, shipping is free, else 10 dollars
       state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10);
@@ -50,7 +55,6 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       const itemId = action.payload;
       state.items = state.items.filter((item) => item.id !== itemId);
-      
     },
     clearCart: (state) => {
       state.items = [];
