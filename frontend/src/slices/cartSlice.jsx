@@ -30,6 +30,7 @@ const cartSlice = createSlice({
       console.log(action.payload);
       const itemId = action.payload;
       state.cartItems = state.cartItems.filter((item) => item._id !== itemId);
+      return updateCart(state);
     },
     clearCart: (state) => {
       state.items = [];
