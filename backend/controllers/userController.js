@@ -49,6 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
     });
   } else {
     res.status(400);
@@ -115,8 +116,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 //admin route to get all the users
 
 const getUsers = asyncHandler(async (req, res) => {
+  console.log("get users");
   const users = await User.find({});
-  res.json(users);
+  res.status(200).json(users);
 });
 
 // @desc    Get user by id
