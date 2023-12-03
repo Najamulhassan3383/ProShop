@@ -4,11 +4,15 @@ import connectDB from "./config/db.js";
 const PORT = process.env.PORT || 5000;
 
 import productRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import cors from "cors";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 const App = express();
+//body parser middlware
+App.use(express.json());
+App.use(express.urlencoded({ extended: true }));
 connectDB();
 
 App.use(cors());
@@ -18,6 +22,7 @@ App.get("/", (req, res) => {
 });
 
 App.use("/api/products", productRoutes);
+App.use("/api/users", userRoutes);
 
 App.use(notFound);
 App.use(errorHandler);
