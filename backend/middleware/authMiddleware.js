@@ -34,5 +34,4 @@ const admin = asyncHandler(async (req, res, next) => {
   throw new Error("Not authorized as an admin");
 });
 
-
-export { protect };
+export { protect, admin };

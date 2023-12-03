@@ -10,17 +10,21 @@ import {
   deleteUser,
   updateUser,
 } from "../controllers/userController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", registerUser).get(getUsers);
+router.post("/", registerUser).get(protect, admin, getUsers);
 router.post("/auth", authUser);
 router.post("/logout", logoutUser);
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
-router.route("/:id").get(getUser).put(updateUser).delete(deleteUser);
+router
+  .route("/:id")
+  .get(protect, admin, getUser)
+  .put(protect, admin, updateUser)
+  .delete(protect, admin, deleteUser);
 
 export default router;
