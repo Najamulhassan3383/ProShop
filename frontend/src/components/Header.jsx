@@ -1,6 +1,7 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import NavDropDown from "react-bootstrap/NavDropdown";
 import Badge from "react-bootstrap/Badge";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import logo from "../assets/logo.png";
@@ -10,7 +11,11 @@ import { useSelector } from "react-redux";
 
 function Header() {
   const { cartItems } = useSelector((state) => state.cart);
-  console.log(cartItems);
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(cartItems);
+  const logoutHandler = () => {
+    console.log("logout");
+  };
   return (
     <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
       <Container>
@@ -39,11 +44,22 @@ function Header() {
                 )}
               </Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/login">
-              <Nav.Link>
-                <FaUser /> Sign In
-              </Nav.Link>
-            </LinkContainer>
+            {userInfo ? (
+              <NavDropDown title={userInfo.name} id="username">
+                <LinkContainer to="/profile">
+                  <NavDropDown.Item>Profile</NavDropDown.Item>
+                </LinkContainer>
+                <NavDropDown.Item onClick={logoutHandler}>
+                  Logout
+                </NavDropDown.Item>
+              </NavDropDown>
+            ) : (
+              <LinkContainer to="/login">
+                <Nav.Link>
+                  <FaUser /> Sign In
+                </Nav.Link>
+              </LinkContainer>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

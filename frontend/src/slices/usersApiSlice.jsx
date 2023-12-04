@@ -1,4 +1,4 @@
-import { apiSlice } from "./apiSlice.jsx";
+import { apiSlice } from "./apiSlice.js";
 import { USER_URL } from "../constants.js";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -7,7 +7,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: (credentials) => ({
         url: `${USER_URL}/auth`,
         method: "POST",
-        body: credentials, 
+        body: credentials,
       }),
     }),
     logout: builder.mutation({
