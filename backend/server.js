@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 const App = express();
@@ -27,6 +28,7 @@ App.get("/", (req, res) => {
 
 App.use("/api/products", productRoutes);
 App.use("/api/users", userRoutes);
+App.use("/api/orders", orderRoutes);
 
 App.use(notFound);
 App.use(errorHandler);
