@@ -6,6 +6,7 @@ const initialState = localStorage.getItem("cart")
   : {
       cartItems: [],
       shippingAddress: "",
+      paymentMethod: "Easypaisa",
     };
 
 const cartSlice = createSlice({
@@ -41,10 +42,19 @@ const cartSlice = createSlice({
       state.shippingAddress = action.payload;
       return updateCart(state);
     },
+    savePaymentMethod: (state, action) => {
+      state.paymentMethod = action.payload;
+      return updateCart(state);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart, saveShippingAdreess } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  saveShippingAdreess,
+  savePaymentMethod,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
