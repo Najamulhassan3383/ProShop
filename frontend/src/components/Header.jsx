@@ -35,7 +35,7 @@ function Header() {
         <LinkContainer to="/">
           <Navbar.Brand>
             <img src={logo} alt="logo" />
-            Proshop
+            NH Shop
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

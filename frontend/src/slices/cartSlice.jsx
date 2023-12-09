@@ -5,6 +5,7 @@ const initialState = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
   : {
       cartItems: [],
+      shippingAddress: "",
     };
 
 const cartSlice = createSlice({
@@ -36,9 +37,14 @@ const cartSlice = createSlice({
       state.items = [];
       state.total = 0;
     },
+    saveShippingAdreess: (state, action) => {
+      state.shippingAddress = action.payload;
+      return updateCart(state);
+    },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, saveShippingAdreess } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
