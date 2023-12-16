@@ -1,6 +1,8 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+const { setCookie } = "cookie"; // Import the setCookie function from the cookie package
+import jwt from "jsonwebtoken";
 
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
@@ -11,7 +13,19 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+
+    res.cookie("jwt", token, {
+      maxAge: 2592000000, // 30 days in milliseconds
+      httpOnly: true,
+      sameSite: "none",
+      secure: true, // set to true if not in development mode
+      path: "/",
+    });
+
+    // Set the cookie with the generated token
 
     res.json({
       _id: user._id,
@@ -43,7 +57,15 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
   //if user is created
-  generateToken(res, user._id);
+  const token = generateToken(user._id);
+  const cookieOptions = {
+    httpOnly: true,
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ), // Set the cookie expiration time
+  };
+  setCookie(res, "jwt", token, cookieOptions); // Set the cookie with the generated token
+
   if (user) {
     res.status(200).json({
       _id: user._id,

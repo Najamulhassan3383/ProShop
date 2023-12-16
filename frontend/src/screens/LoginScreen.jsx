@@ -10,8 +10,8 @@ import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("123456");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ const LoginScreen = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      console.log(res)
+      console.log(res);
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (err) {

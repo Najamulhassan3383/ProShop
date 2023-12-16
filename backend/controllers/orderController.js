@@ -5,8 +5,9 @@ import Order from "../models/orderModel.js";
 // @route   POST /api/orders
 // @access  Private
 const addOrderItems = asyncHandler(async (req, res) => {
+  // console.log("i am called");
   const {
-    orderItems,
+    cartItems: orderItems,
     shippingAddress,
     paymentMethod,
     itemsPrice,
@@ -14,20 +15,19 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
   } = req.body;
+  // console.log(orderItems);
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error("No order items");
-    return;
   } else {
+    // console.log(orderItems);
     const order = new Order({
-      orderItems: orderItems.map((item) => {
-        return {
-          ...item,
-          product: req._id,
-          _id: undefined,
-        };
-      }),
+      orderItems: orderItems.map((item) => ({
+        ...item,
+        product: item._id,
+        _id: undefined,
+      })),
       user: req.user._id,
       shippingAddress,
       paymentMethod,

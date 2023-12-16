@@ -11,27 +11,39 @@ import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
-const App = express();
-//body parser middlware
-App.use(express.json());
-App.use(express.urlencoded({ extended: true }));
 
-//cookie parser middleware
-App.use(cookieParser());
 connectDB();
 
-App.use(cors());
+const app = express();
+const corsOptions = {
+  origin: "http://localhost:5173", // replace with the origin of your React app
+  credentials: true,
+};
 
-App.get("/", (req, res) => {
-  res.send("Server is ready");
+app.use(cors(corsOptions));
+// app.use(cors());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.get("/", (req, res) => {
+  res.cookie("jwt", "your_token_here", {
+    maxAge: 2592000000, // 30 days in milliseconds
+    httpOnly: true,
+    sameSite: "Strict",
+  });
+  res.send("Cookie set successfully");
 });
+// app.get("/", (req, res) => {
 
-App.use("/api/products", productRoutes);
-App.use("/api/users", userRoutes);
-App.use("/api/orders", orderRoutes);
+//   res.send("Cookie set successfully");
+// });
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
-App.use(notFound);
-App.use(errorHandler);
-App.listen(PORT, () => {
+app.use(notFound);
+app.use(errorHandler);
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

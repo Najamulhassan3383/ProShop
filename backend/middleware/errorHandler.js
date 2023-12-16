@@ -6,7 +6,7 @@ const notFound = (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
   // set the status code to 500 if not set
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message;
 
   // if the error is a mongoose error, then we want to send a more user friendly message
