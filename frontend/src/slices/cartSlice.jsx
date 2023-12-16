@@ -35,8 +35,8 @@ const cartSlice = createSlice({
       return updateCart(state);
     },
     clearCart: (state) => {
-      state.items = [];
-      state.total = 0;
+      state.cartItems = [];
+      return updateCart(state);
     },
     saveShippingAdreess: (state, action) => {
       state.shippingAddress = action.payload;
