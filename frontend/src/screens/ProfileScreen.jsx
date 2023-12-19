@@ -9,6 +9,7 @@ import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 import { useProfileMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
+import { useGetMyordersQuery } from "../slices/ordersApiSlice";
 function ProfileScreen() {
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -24,6 +25,11 @@ function ProfileScreen() {
     }
   }, [userInfo]);
   const [profile, { isLoading, error }] = useProfileMutation();
+  const {
+    data: orders,
+    isLoading: orderLoading,
+    error: orderError,
+  } = useGetMyordersQuery();
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -44,6 +50,7 @@ function ProfileScreen() {
     }
   };
 
+  console.log(orders);
   return (
     <Row>
       <Col md={3}>
@@ -94,6 +101,47 @@ function ProfileScreen() {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {orderLoading ? (
+          <Spinner />
+        ) : error ? (
+          <Message variant="danger">
+            {orderError?.data?.message || orderError.error}
+          </Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Paid</th>
+                <th>Delivered</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders?.map((order) => (
+                // console.log(order)
+                <tr key={order._id}>
+                  <td>{order._id}</td>
+                  <td>{order.createdAt.substring(0, 10)}</td>
+                  <td>${order.totalPrice}</td>
+                  <td>{order.isPaid ? order.paidAt.substring(0, 10) : "No"}</td>
+                  <td>
+                    {order.isDelivered
+                      ? order.deliveredAt.substring(0, 10)
+                      : "No"}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${order._id}`}>
+                      <Button className="btn-sm">Details</Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   );
