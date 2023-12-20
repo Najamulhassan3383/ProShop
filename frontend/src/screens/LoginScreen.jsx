@@ -10,8 +10,8 @@ import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("najmulhassan@gmail.com");
+  const [password, setPassword] = useState("1234");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

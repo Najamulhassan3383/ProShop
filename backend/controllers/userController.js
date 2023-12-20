@@ -13,20 +13,7 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
-
-    res.cookie("jwt", token, {
-      maxAge: 2592000000, // 30 days in milliseconds
-      httpOnly: true,
-      sameSite: "none",
-      secure: true, // set to true if not in development mode
-      path: "/",
-    });
-
-    // Set the cookie with the generated token
-
+    generateToken(res, user._id);
     res.json({
       _id: user._id,
       name: user.name,
@@ -43,31 +30,24 @@ const authUser = asyncHandler(async (req, res) => {
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+
   const userExists = await User.findOne({ email });
-  // console.log(userExists.email, userExists.name);
 
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
   }
-  //otherwise create user
+
   const user = await User.create({
     name,
     email,
     password,
   });
-  //if user is created
-  const token = generateToken(user._id);
-  const cookieOptions = {
-    httpOnly: true,
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ), // Set the cookie expiration time
-  };
-  setCookie(res, "jwt", token, cookieOptions); // Set the cookie with the generated token
 
   if (user) {
-    res.status(200).json({
+    generateToken(res, user._id);
+
+    res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
