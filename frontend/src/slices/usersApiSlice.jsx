@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice.js";
-import { USER_URL, BASE_URL } from "../constants.js";
+import { USER_URL } from "../constants.js";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
